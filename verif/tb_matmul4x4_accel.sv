@@ -10,32 +10,17 @@ module tb_matmul4x4_accel;
     logic start;
     logic done;
 
-
-
     logic signed [DATA_W-1:0] a_matrix [0:3][0:3];
     logic signed [DATA_W-1:0] b_matrix [0:3][0:3];
-
-
-    
 
     logic signed [ACC_W-1:0] c_matrix [0:3][0:3];
 
     logic overflow;
-
-
-    
-
     integer signed expected [0:3][0:3];
-
-
-   
 
     integer total_tests;
     integer total_failures;
     integer seed;
-
-
-   
 
     matmul4x4_accel #(
         .DATA_W(DATA_W),
@@ -50,18 +35,11 @@ module tb_matmul4x4_accel;
         .c_matrix (c_matrix),
         .overflow (overflow)
     );
-
-
-   
-
     initial begin
         clk = 1'b0;
     end
 
     always #5 clk = ~clk;
-
-
-   
     task automatic clear_matrices;
 
         begin
@@ -80,10 +58,6 @@ module tb_matmul4x4_accel;
         end
 
     endtask
-
-
-   
-
     task automatic calculate_expected;
 
         integer signed sum;
@@ -121,10 +95,6 @@ module tb_matmul4x4_accel;
         end
 
     endtask
-
-
-    
-
     task automatic start_operation;
 
         begin
@@ -378,9 +348,6 @@ module tb_matmul4x4_accel;
         end
 
     endtask
-
-
-
     task automatic test_random;
 
         integer signed value_a;
@@ -402,8 +369,6 @@ module tb_matmul4x4_accel;
                 end
 
             end
-
-
             calculate_expected();
 
             start_operation();
@@ -416,38 +381,19 @@ module tb_matmul4x4_accel;
 
     endtask
 
-
     initial begin
-
- 
-
         clk = 1'b0;
-
         start = 1'b0;
-
         rst_n = 1'b0;
-
         total_tests = 0;
-
         total_failures = 0;
-
         seed = 12345;
-
-
         clear_matrices();
-
-
-       
-
         $display("");
         $display("==============================================");
         $display("4x4 MATRIX MULTIPLIER - SIM1");
         $display("==============================================");
         $display("");
-
-
-        
-
         $display("Applying reset...");
 
         repeat (3) begin
@@ -457,25 +403,16 @@ module tb_matmul4x4_accel;
         rst_n = 1'b1;
 
         $display("Reset released.");
-
-
-      
         // Test 1
-    
-
         test_identity();
         // Test 2
-    
-
         test_zero();
 
         // Test 3
-    
 
         test_all_ones();
 
         // Tests 4-8
-        
 
         $display("");
         $display("----------------------------------------------");
@@ -495,8 +432,6 @@ module tb_matmul4x4_accel;
             test_random();
 
         end
-
-
 
         $display("");
         $display("==============================================");
@@ -523,7 +458,6 @@ module tb_matmul4x4_accel;
             $display("");
 
         end
-
         else begin
 
             $display("");
@@ -535,8 +469,6 @@ module tb_matmul4x4_accel;
             $fatal(1);
 
         end
-
-
         $finish;
 
     end
