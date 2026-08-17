@@ -22,31 +22,9 @@ The implementation follows the supplied problem statement and prioritizes correc
 
 The problem statement specifies 8-bit signed Q4.4 inputs, 20-bit signed Q12.8 accumulator/output, a synchronous active-low reset, a single-cycle `start` pulse, and a `done` indication when the complete result is valid.
 
-## 2. Repository layout
 
-```text
-matmul4x4_accelerator/
-├── README.md
-├── Makefile
-├── src/
-│   └── matmul4x4_accel.sv
-├── verif/
-│   ├── tb_matmul4x4_accel.sv
-│   └── tb_overflow.sv
-├── scripts/
-│   ├── golden_model.py
-│   ├── run.do
-│   └── run_overflow.do
-└── doc/
-    ├── architecture.md
-    ├── verification.md
-    ├── fixed_point.md
-    └── diagrams/
-        ├── architecture.svg
-        └── timing.svg
-```
 
-## 3. Architecture
+## 2. Architecture
 
 The design uses **one shared MAC datapath** and a small FSM:
 
@@ -60,7 +38,7 @@ The design captures both input matrices when `start` is accepted. During `COMPUT
 
 This architecture is intentionally simple. The supplied specification explicitly states that latency/throughput is not graded and recommends a shared MAC or small parallel MAC architecture.
 
-## 4. Fixed-point representation
+## 3. Fixed-point representation
 
 ### Inputs
 
@@ -100,7 +78,7 @@ For four terms:
 Q12.8 representation = 1024
 ```
 
-## 5. Overflow behavior
+## 4. Overflow behavior
 
 The RTL implements **signed saturation plus an overflow flag**.
 
@@ -110,7 +88,7 @@ An important observation from the supplied specification is that the default 20-
 
 To still verify the overflow logic as requested, `verif/tb_overflow.sv` instantiates the same RTL with `ACC_W=12`. The maximum legal Q4.4 input (`127`, or 7.9375) then deliberately produces a result larger than the reduced 12-bit signed range, and the testbench checks both saturation and the overflow flag.
 
-## 6. Interface
+## 5. Interface
 
 ```systemverilog
 module matmul4x4_accel #(
@@ -137,13 +115,13 @@ module matmul4x4_accel #(
 5. `c_matrix` remains unchanged until a later computation produces a new result.
 6. `overflow` is cleared when a new accepted `start` begins.
 
-## 7. Latency
+## 6. Latency
 
 The implementation performs 64 MAC steps. A dot product consumes four compute cycles, and there are 16 output elements.
 
 The exact visible `done` timing also includes the FSM transition into `DONE`. No throughput requirement is imposed by the supplied problem statement.
 
-## 8. Verification
+## 7. Verification
 
 The main SystemVerilog testbench is self-checking and covers:
 
@@ -161,7 +139,7 @@ The reduced-width overflow testbench checks:
 
 The Python reference model in `scripts/golden_model.py` implements the same integer fixed-point arithmetic and can be used independently to inspect expected results.
 
-## 9. Running with ModelSim / QuestaSim on Linux
+## 8. Running with ModelSim / QuestaSim on Linux
 
 ### Prerequisites
 
