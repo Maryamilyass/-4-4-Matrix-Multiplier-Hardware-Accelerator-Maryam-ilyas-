@@ -270,15 +270,4 @@ This project intentionally does not implement:
 
 These exclusions are consistent with the supplied problem statement.
 
-## 13. Author checklist
 
-Before submission:
-
-- [ ] Run `make`
-- [ ] Confirm all normal tests report PASS
-- [ ] Confirm overflow regression reports PASS
-- [ ] Confirm `README.md` is present in the repository root
-- [ ] Confirm RTL is under `src/`
-- [ ] Confirm testbenches are under `verif/`
-- [ ] Confirm design documentation and diagrams are under `doc/`
-- [ ] Commit the repository with a clean history
