@@ -77,8 +77,6 @@ module matmul4x4_accel #(
 
                         row <= 2'd0;
                         col <= 2'd0;
-
-                        // Clear overflow for new operation
                         overflow <= 1'b0;
 
                         state <= CALC;
@@ -96,10 +94,6 @@ module matmul4x4_accel #(
 
                     max_value = (2 ** (ACC_W - 1)) - 1;
                     min_value = -(2 ** (ACC_W - 1));
-
-
-                
-
                     accumulator =
 
                           ($signed(a_matrix[row][0])
@@ -139,8 +133,6 @@ module matmul4x4_accel #(
 
                     end
 
-
-
                     if (col == 2'd3) begin
 
                         col <= 2'd0;
@@ -175,9 +167,6 @@ module matmul4x4_accel #(
                     state <= IDLE;
 
                 end
-
-
-               
 
                 default: begin
 
