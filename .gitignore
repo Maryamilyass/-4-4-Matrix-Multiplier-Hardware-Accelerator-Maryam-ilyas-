@@ -1,0 +1,9 @@
+work/
+transcript
+vsim.wlf
+*.log
+*.jou
+*.vcd
+*.wlf
+__pycache__/
+.DS_Store
