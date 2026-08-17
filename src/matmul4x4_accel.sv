@@ -18,10 +18,6 @@ module matmul4x4_accel #(
     output logic overflow
 );
 
-    // ============================================================
-    // State machine
-    // ============================================================
-
     typedef enum logic [1:0] {
         IDLE,
         CALC,
@@ -34,22 +30,13 @@ module matmul4x4_accel #(
     logic [1:0] col;
 
 
-    // ============================================================
-    // Wide temporary accumulator
-    //
-    // integer is at least 32 bits in Questa/SystemVerilog.
-    // This is deliberately wider than the configurable output.
-    // ============================================================
+   
 
     integer signed accumulator;
 
     integer signed max_value;
     integer signed min_value;
 
-
-    // ============================================================
-    // Main sequential process
-    // ============================================================
 
     always_ff @(posedge clk) begin
 
@@ -107,27 +94,11 @@ module matmul4x4_accel #(
 
                 CALC: begin
 
-                    // ------------------------------------------------
-                    // Calculate ACC_W limits using integer arithmetic.
-                    //
-                    // For ACC_W = 12:
-                    //
-                    // max = +2047
-                    // min = -2048
-                    //
-                    // For ACC_W = 20:
-                    //
-                    // max = +524287
-                    // min = -524288
-                    // ------------------------------------------------
-
                     max_value = (2 ** (ACC_W - 1)) - 1;
                     min_value = -(2 ** (ACC_W - 1));
 
 
-                    // ------------------------------------------------
-                    // Calculate 4-element dot product.
-                    // ------------------------------------------------
+                
 
                     accumulator =
 
@@ -143,11 +114,6 @@ module matmul4x4_accel #(
                         + ($signed(a_matrix[row][3])
                            * $signed(b_matrix[3][col]));
 
-
-                    // ------------------------------------------------
-                    // Positive overflow
-                    // ------------------------------------------------
-
                     if (accumulator > max_value) begin
 
                         c_matrix[row][col] <= max_value;
@@ -156,10 +122,6 @@ module matmul4x4_accel #(
 
                     end
 
-
-                    // ------------------------------------------------
-                    // Negative overflow
-                    // ------------------------------------------------
 
                     else if (accumulator < min_value) begin
 
@@ -170,10 +132,7 @@ module matmul4x4_accel #(
                     end
 
 
-                    // ------------------------------------------------
-                    // No overflow
-                    // ------------------------------------------------
-
+                
                     else begin
 
                         c_matrix[row][col] <= accumulator;
@@ -181,9 +140,6 @@ module matmul4x4_accel #(
                     end
 
 
-                    // ------------------------------------------------
-                    // Move to next matrix element
-                    // ------------------------------------------------
 
                     if (col == 2'd3) begin
 
@@ -212,10 +168,6 @@ module matmul4x4_accel #(
                 end
 
 
-                // =================================================
-                // FINISH
-                // =================================================
-
                 FINISH: begin
 
                     done <= 1'b1;
@@ -225,9 +177,7 @@ module matmul4x4_accel #(
                 end
 
 
-                // =================================================
-                // DEFAULT
-                // =================================================
+               
 
                 default: begin
 
