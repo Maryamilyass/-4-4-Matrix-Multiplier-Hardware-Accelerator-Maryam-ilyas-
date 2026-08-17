@@ -3,7 +3,7 @@
 module tb_overflow;
 
     localparam int DATA_W = 8;
-    localparam int ACC_W  = 12; // Deliberately reduced from specified 20 bits.
+    localparam int ACC_W  = 12; 
 
     logic clk = 1'b0;
     logic rst_n = 1'b0;
